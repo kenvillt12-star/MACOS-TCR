@@ -1,0 +1,21 @@
+name: Build MacOS
+on: [push]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install nuitka ordered-set
+      - name: Compile Binary
+        run: |
+          python -m nuitka --standalone --onefile --enable-plugin=tk-inter --output-dir=dist --output-filename=TikTok_Coin_Recharge_Mac --remove-output release_payload.py
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: MacOS_Executable
+          path: dist/TikTok_Coin_Recharge_Mac
